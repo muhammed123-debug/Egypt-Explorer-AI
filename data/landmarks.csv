@@ -1,0 +1,280 @@
+﻿landmark_id,landmark_name,folder_name,image_count
+1,6 October Bridge,6_October_Bridge,15
+2,Abdeen Palace,Abdeen_Palace,17
+3,Abu el-Abbas el-Mursi Mosque,Abu_el-Abbas_el-Mursi_Mosque,36
+4,Abu Ghurab,Abu_Ghurab,1
+5,Abu Haggag Mosque,Abu_Haggag_Mosque,37
+6,Abu Qir Bay,Abu_Qir_Bay,1
+7,Agiba beach,Agiba_beach,75
+8,Aguilkia Island,Aguilkia_Island,5
+9,Ahmed Shawki Museum,Ahmed_Shawki_Museum,4
+10,Al-Aqmar Mosque,Al-Aqmar_Mosque,25
+11,Al-Ashraf Mosque,Al-Ashraf_Mosque,17
+12,Al-Azhar Park (Cairo),Al-Azhar_Park_(Cairo),50
+13,Al-Fath Mosque,Al-Fath_Mosque,3
+14,Al-Ghuri Complex,Al-Ghuri_Complex,39
+15,Al-Jawhara Palace museum,Al-Jawhara_Palace_museum,4
+16,Al-Manyal Palace Museum,Al-Manyal_Palace_Museum,22
+17,Al-Nur Mosque,Al-Nur_Mosque,9
+18,Al-Qurn,Al-Qurn,13
+19,Al-Rifa'i Mosque,Al-Rifa'i_Mosque,5
+20,Al-Salih Tala'i Mosque,Al-Salih_Tala'i_Mosque,15
+21,Al-Sayeda Nafeesah Mosque,Al-Sayeda_Nafeesah_Mosque,6
+22,Al-Sayeda Zainab Mosque,Al-Sayeda_Zainab_Mosque,1
+23,Al-Shate'e Mosque,Al-Shate'e_Mosque,17
+24,Al Fattah Al Alim Mosque (Cairo),Al_Fattah_Al_Alim_Mosque_(Cairo),1
+25,Alexandria National Museum,Alexandria_National_Museum,3
+26,Alexandria Opera House,Alexandria_Opera_House,89
+27,Alexandria Port,Alexandria_Port,4
+28,Alexandria Stadium,Alexandria_Stadium,3
+29,Alexandria Zoo,Alexandria_Zoo,13
+30,Amada,Amada,1
+31,Amir Taz Palace,Amir_Taz_Palace,4
+32,Amr Ibn al-Aas Mosque (Damietta),Amr_Ibn_al-Aas_Mosque_(Damietta),4
+33,Antoniadis Palace,Antoniadis_Palace,9
+34,Aqsunqur Mosque,Aqsunqur_Mosque,12
+35,Aquarium Grotto Garden,Aquarium_Grotto_Garden,33
+36,Aswan Botanical Garden,Aswan_Botanical_Garden,24
+37,Aswan High Dam,Aswan_High_Dam,47
+38,Aswan Low Dam,Aswan_Low_Dam,9
+39,Aswan Museum,Aswan_Museum,6
+40,Attarine Mosque,Attarine_Mosque,1
+41,Bab al-Futuh,Bab_al-Futuh,13
+42,Bab al-Nasr (Cairo),Bab_al-Nasr_(Cairo),20
+43,Bab Zuwayla,Bab_Zuwayla,31
+44,Bagawat,Bagawat,55
+45,Bahr Yousef canal,Bahr_Yousef_canal,3
+46,Baron Empain Palace,Baron_Empain_Palace,28
+47,Bayt Al-Suhaymi,Bayt_Al-Suhaymi,82
+48,Ben Ezra Synagogue,Ben_Ezra_Synagogue,15
+49,Beni Hassan,Beni_Hassan,8
+50,Bent Pyramid,Bent_Pyramid,40
+51,Bibliotheca Alexandrina,Bibliotheca_Alexandrina,77
+52,Bibliotheca Alexandrina planetarium,Bibliotheca_Alexandrina_planetarium,14
+53,Black Pyramid of Amenemhat III,Black_Pyramid_of_Amenemhat_III,5
+54,Blue Hole (Red Sea),Blue_Hole_(Red_Sea),6
+55,Borg El Arab Stadium,Borg_El_Arab_Stadium,5
+56,Cairo Citadel,Cairo_Citadel,22
+57,Cairo International Stadium,Cairo_International_Stadium,2
+58,Cairo Opera House,Cairo_Opera_House,9
+59,"Cathedral of St. Mark, Alexandria","Cathedral_of_St._Mark,_Alexandria",3
+60,Children's Civilisation and Creativity Centre,Children's_Civilisation_and_Creativity_Centre,8
+61,Citadel of Qaitbay,Citadel_of_Qaitbay,32
+62,City of the dead (Cairo),City_of_the_dead_(Cairo),15
+63,Collections of the Imhotep Museum in Saqqara,Collections_of_the_Imhotep_Museum_in_Saqqara,6
+64,Colossi of Memnon,Colossi_of_Memnon,91
+65,Coloured Canyon,Coloured_Canyon,9
+66,Coptic Museum in Cairo,Coptic_Museum_in_Cairo,6
+67,Corniche (Alexandria),Corniche_(Alexandria),24
+68,"Crystal Mountain, White Desert","Crystal_Mountain,_White_Desert",5
+69,Deir el-Bahari,Deir_el-Bahari,40
+70,Deir el-Medina,Deir_el-Medina,35
+71,Deir el-Muharraq,Deir_el-Muharraq,12
+72,Deir el-Qadisa Damyana,Deir_el-Qadisa_Damyana,3
+73,Dendera Temple complex,Dendera_Temple_complex,22
+74,Desouk Stadium,Desouk_Stadium,1
+75,Dra Abu el-Naga,Dra_Abu_el-Naga,4
+76,Dream Park,Dream_Park,2
+77,Edfu Temple,Edfu_Temple,17
+78,Egyptian Geological Museum,Egyptian_Geological_Museum,12
+79,Egyptian Museum (Cairo),Egyptian_Museum_(Cairo),10
+80,Egyptian National Library,Egyptian_National_Library,3
+81,Egyptian National Military Museum,Egyptian_National_Military_Museum,61
+82,"El-Bahr mosque, Dumyat","El-Bahr_mosque,_Dumyat",11
+83,"El-Ma'eini mosque, Dumyat","El-Ma'eini_mosque,_Dumyat",3
+84,EL-Safa Park,EL-Safa_Park,2
+85,El Alamein Military Museum,El_Alamein_Military_Museum,22
+86,El Ferdan Railway Bridge,El_Ferdan_Railway_Bridge,3
+87,Elephantine,Elephantine,185
+88,Eliyahu Hanavi Synagogue (Alexandria),Eliyahu_Hanavi_Synagogue_(Alexandria),5
+89,Emir Qurqumas complex,Emir_Qurqumas_complex,4
+90,Esna Temple,Esna_Temple,18
+91,Faiyum Zoo,Faiyum_Zoo,16
+92,Famine stele,Famine_stele,3
+93,Fatima Khatun Mosque,Fatima_Khatun_Mosque,7
+94,Fatimid Cemetery in Aswan,Fatimid_Cemetery_in_Aswan,50
+95,"Garden City, Cairo","Garden_City,_Cairo",15
+96,Gayer-Anderson Museum,Gayer-Anderson_Museum,40
+97,Gebel el-Silsila,Gebel_el-Silsila,66
+98,"Gebel el-Teir, el-Kharga","Gebel_el-Teir,_el-Kharga",4
+99,Gezira,Gezira,15
+100,Gezira Center for Modern Art,Gezira_Center_for_Modern_Art,1
+101,Gidi Pass,Gidi_Pass,1
+102,Gilf Kebir Plateau,Gilf_Kebir_Plateau,2
+103,"Giyushi Mosque, Cairo","Giyushi_Mosque,_Cairo",2
+104,Giza Plateau,Giza_Plateau,43
+105,Giza pyramid complex,Giza_pyramid_complex,54
+106,Giza Zoo,Giza_Zoo,49
+107,Grand Egyptian Museum,Grand_Egyptian_Museum,13
+108,Great Hypostyle Hall of Karnak,Great_Hypostyle_Hall_of_Karnak,96
+109,Great Pyramid of Giza,Great_Pyramid_of_Giza,42
+110,Great Sphinx of Giza,Great_Sphinx_of_Giza,36
+111,Great Temple of the Aten,Great_Temple_of_the_Aten,2
+112,"Greco-Roman Museum, Alexandria","Greco-Roman_Museum,_Alexandria",8
+113,"Greek Orthodox Cathedral of Evangelismos, Alexandria","Greek_Orthodox_Cathedral_of_Evangelismos,_Alexandria",2
+114,Green Island (Egypt),Green_Island_(Egypt),2
+115,Hanging Church (Cairo),Hanging_Church_(Cairo),44
+116,Hatem Mosque,Hatem_Mosque,1
+117,Heliopolis Palace,Heliopolis_Palace,4
+118,Hurghada Grand Aquarium,Hurghada_Grand_Aquarium,2
+119,Islamic Cairo,Islamic_Cairo,45
+120,Island of Bigeh,Island_of_Bigeh,1
+121,Karnak precinct of Amun-Ra,Karnak_precinct_of_Amun-Ra,15
+122,Khan el-Khalili,Khan_el-Khalili,52
+123,Khayrbak Mosque,Khayrbak_Mosque,10
+124,Kiosk of Qertassi,Kiosk_of_Qertassi,18
+125,Kiosk of Trajan in Philae,Kiosk_of_Trajan_in_Philae,52
+126,Kitchener's Island,Kitchener's_Island,19
+127,Kom el-Shoqafa,Kom_el-Shoqafa,16
+128,Koubbeh Palace,Koubbeh_Palace,1
+129,KV17,KV17,15
+130,KV62,KV62,11
+131,Lake Timsah,Lake_Timsah,3
+132,Layer Pyramid,Layer_Pyramid,4
+133,Luxor Museum,Luxor_Museum,5
+134,Luxor Temple,Luxor_Temple,37
+135,Madrasah of Al-Nasir Muhammad,Madrasah_of_Al-Nasir_Muhammad,21
+136,Madrasah of Sarghatmish,Madrasah_of_Sarghatmish,15
+137,Mahmoud Khalil Museum,Mahmoud_Khalil_Museum,2
+138,Mallawi Museum,Mallawi_Museum,2
+139,Mastabat al-Fir'aun,Mastabat_al-Fir'aun,3
+140,Mausoleum of Aga Khan,Mausoleum_of_Aga_Khan,36
+141,Medinet Madi,Medinet_Madi,6
+142,Meidum,Meidum,2
+143,Mohandessin,Mohandessin,13
+144,Mokattam,Mokattam,19
+145,Monastery of Saint Anthony,Monastery_of_Saint_Anthony,17
+146,Monastery of Saint Bishoy,Monastery_of_Saint_Bishoy,16
+147,Monastery of Saint Macarius the Great,Monastery_of_Saint_Macarius_the_Great,35
+148,Monastery of Saint Samuel the Confessor,Monastery_of_Saint_Samuel_the_Confessor,7
+149,Monastery of Saint Simeon in Aswan,Monastery_of_Saint_Simeon_in_Aswan,28
+150,Montaza Palace,Montaza_Palace,86
+151,Mortuary Temple of Hatshepsut,Mortuary_Temple_of_Hatshepsut,58
+152,Mortuary Temple of Seti I in Qurna,Mortuary_Temple_of_Seti_I_in_Qurna,16
+153,Mortuary Temple of Thutmosis III,Mortuary_Temple_of_Thutmosis_III,5
+154,Mosque-Madrassa of Sultan Hassan,Mosque-Madrassa_of_Sultan_Hassan,28
+155,Mosque of al-Mahmudiya,Mosque_of_al-Mahmudiya,18
+156,Mosque of al-Maridani,Mosque_of_al-Maridani,23
+157,Mosque of Ibn Tulun,Mosque_of_Ibn_Tulun,6
+158,Mosque of Qajmas al-Ishaqi,Mosque_of_Qajmas_al-Ishaqi,4
+159,Mosque of Qanibay al-Muhammadi,Mosque_of_Qanibay_al-Muhammadi,1
+160,Mosque of Qanibay al-Rammah,Mosque_of_Qanibay_al-Rammah,15
+161,Mosque of Saint Ibrahim El-Desouky,Mosque_of_Saint_Ibrahim_El-Desouky,26
+162,Mosque of Sultan Abu al-Ila,Mosque_of_Sultan_Abu_al-Ila,1
+163,Mosque of Sultan al-Muayyad,Mosque_of_Sultan_al-Muayyad,7
+164,Mosque of Sultan al-Zahir Baybars,Mosque_of_Sultan_al-Zahir_Baybars,8
+165,Muhammad Ali Mosque,Muhammad_Ali_Mosque,10
+166,Muizz Street,Muizz_Street,92
+167,Museum of Constantine P. Cavafy,Museum_of_Constantine_P._Cavafy,3
+168,"Museum of Islamic Art, Cairo","Museum_of_Islamic_Art,_Cairo",4
+169,Na'ama Bay,Na'ama_Bay,83
+170,Nabq Protected Area,Nabq_Protected_Area,63
+171,New Kalabsha,New_Kalabsha,4
+172,Nilometer in Rhoda Island,Nilometer_in_Rhoda_Island,8
+173,"Nubia Museum, Aswan","Nubia_Museum,_Aswan",9
+174,Nyuserre sun temple,Nyuserre_sun_temple,6
+175,Orman Garden,Orman_Garden,37
+176,Osireion,Osireion,18
+177,Paromeos Monastery,Paromeos_Monastery,9
+178,Petrified Forest near Maadi,Petrified_Forest_near_Maadi,2
+179,Pharaon Island,Pharaon_Island,8
+180,"Pompey's Pillar, Alexandria","Pompey's_Pillar,_Alexandria",31
+181,Port Said Lighthouse,Port_Said_Lighthouse,7
+182,Port Tewfik Memorial,Port_Tewfik_Memorial,3
+183,Ptolemaic Temple of Hathor in Deir el-Medina,Ptolemaic_Temple_of_Hathor_in_Deir_el-Medina,54
+184,Pyramid of Ahmose,Pyramid_of_Ahmose,9
+185,Pyramid of Amenemhat I,Pyramid_of_Amenemhat_I,5
+186,Pyramid of Amenemhat III in Hawara,Pyramid_of_Amenemhat_III_in_Hawara,19
+187,Pyramid of Ameni Qemau,Pyramid_of_Ameni_Qemau,1
+188,Pyramid of Baka,Pyramid_of_Baka,1
+189,Pyramid of Djedefra,Pyramid_of_Djedefra,19
+190,Pyramid of Djedkare Isesi,Pyramid_of_Djedkare_Isesi,12
+191,Pyramid of Djoser,Pyramid_of_Djoser,76
+192,Pyramid of Khafra,Pyramid_of_Khafra,73
+193,Pyramid of Khendjer,Pyramid_of_Khendjer,2
+194,Pyramid of Khentkaus II,Pyramid_of_Khentkaus_II,3
+195,Pyramid of Menkaure,Pyramid_of_Menkaure,29
+196,Pyramid of Merenre Nemtyemsaf I,Pyramid_of_Merenre_Nemtyemsaf_I,1
+197,Pyramid of Neferefre,Pyramid_of_Neferefre,4
+198,Pyramid of Neferirkare,Pyramid_of_Neferirkare,7
+199,Pyramid of Nyuserre Ini,Pyramid_of_Nyuserre_Ini,12
+200,Pyramid of Pepi I,Pyramid_of_Pepi_I,4
+201,Pyramid of Pepi II,Pyramid_of_Pepi_II,3
+202,Pyramid of Qakare Ibi,Pyramid_of_Qakare_Ibi,1
+203,Pyramid of Sahure,Pyramid_of_Sahure,11
+204,Pyramid of Seila,Pyramid_of_Seila,1
+205,Pyramid of Senusret I,Pyramid_of_Senusret_I,2
+206,Pyramid of Senusret II,Pyramid_of_Senusret_II,14
+207,Pyramid of Teti,Pyramid_of_Teti,7
+208,Pyramid of Unas,Pyramid_of_Unas,26
+209,Pyramid of Userkaf,Pyramid_of_Userkaf,6
+210,Qaed Ibrahim Mosque,Qaed_Ibrahim_Mosque,18
+211,Qalawun complex,Qalawun_complex,4
+212,Qasr al-Nil Bridge,Qasr_al-Nil_Bridge,19
+213,Qasr Qarun,Qasr_Qarun,21
+214,Qubbet el-Hawa,Qubbet_el-Hawa,53
+215,Qurnet Murai,Qurnet_Murai,4
+216,Rahmanyia island,Rahmanyia_island,1
+217,Ramesseum,Ramesseum,55
+218,Ras el-Tin Palace,Ras_el-Tin_Palace,1
+219,Ras Muhammad,Ras_Muhammad,19
+220,Red Monastery,Red_Monastery,3
+221,Red Pyramid,Red_Pyramid,27
+222,Relations of Egypt and Italy,Relations_of_Egypt_and_Italy,1
+223,Rhoda Island,Rhoda_Island,9
+224,Sabil of Abd al-Rahman Katkhuda,Sabil_of_Abd_al-Rahman_Katkhuda,26
+225,Sadat museum,Sadat_museum,7
+226,Saint Barbara Church in Coptic Cairo,Saint_Barbara_Church_in_Coptic_Cairo,3
+227,"Saint Catherine's Monastery, Mount Sinai","Saint_Catherine's_Monastery,_Mount_Sinai",84
+228,Saint George Church in Coptic Cairo,Saint_George_Church_in_Coptic_Cairo,64
+229,"Saint Mark's Coptic Orthodox Cathedral, Cairo","Saint_Mark's_Coptic_Orthodox_Cathedral,_Cairo",9
+230,Saint Mark Coptic Orthodox Church (Heliopolis),Saint_Mark_Coptic_Orthodox_Church_(Heliopolis),8
+231,"Saints Sergius and Bacchus Church, Cairo","Saints_Sergius_and_Bacchus_Church,_Cairo",8
+232,Sakakini Palace,Sakakini_Palace,11
+233,San Stefano Grand Plaza,San_Stefano_Grand_Plaza,4
+234,Saqqara,Saqqara,7
+235,Sayeda Aisha Mosque,Sayeda_Aisha_Mosque,3
+236,Sehel Island,Sehel_Island,5
+237,Sha'ar Hashamayim Synagogue (Cairo),Sha'ar_Hashamayim_Synagogue_(Cairo),2
+238,Sha'b Abu el-Nuhas,Sha'b_Abu_el-Nuhas,1
+239,"Shalalat Garden, Alexandria","Shalalat_Garden,_Alexandria",5
+240,Shepheard's Hotel,Shepheard's_Hotel,2
+241,Siwa,Siwa,134
+242,Sohag Stadium,Sohag_Stadium,1
+243,Soma Bay,Soma_Bay,29
+244,Speos Artemidos,Speos_Artemidos,18
+245,Sphinx of Memphis,Sphinx_of_Memphis,28
+246,"St. Catherine's Cathedral, Alexandria","St._Catherine's_Cathedral,_Alexandria",7
+247,Suez Canal Bridge,Suez_Canal_Bridge,16
+248,Sulayman Agha al-Silahdar Mosque,Sulayman_Agha_al-Silahdar_Mosque,5
+249,Sulayman Pasha Mosque,Sulayman_Pasha_Mosque,6
+250,Sultan Qaytbay Complex,Sultan_Qaytbay_Complex,6
+251,Synagogue of Moses Maimonides,Synagogue_of_Moses_Maimonides,5
+252,Syrian Monastery,Syrian_Monastery,8
+253,Temple of Derr,Temple_of_Derr,11
+254,Temple of Hibis,Temple_of_Hibis,40
+255,Temple of Isis in Deir el-Shelwit,Temple_of_Isis_in_Deir_el-Shelwit,4
+256,Temple of Isis in Philae,Temple_of_Isis_in_Philae,57
+257,Temple of Khonsu in Karnak,Temple_of_Khonsu_in_Karnak,58
+258,Temple of Kom Ombo,Temple_of_Kom_Ombo,98
+259,Temple of Seti I in Abydos,Temple_of_Seti_I_in_Abydos,30
+260,Theban Necropolis,Theban_Necropolis,20
+261,"Tirbana mosque, Alexandria","Tirbana_mosque,_Alexandria",2
+262,Tomb of Hetepheres,Tomb_of_Hetepheres,3
+263,Tomb of Kheruef,Tomb_of_Kheruef,7
+264,Tomb of Nakht TT52,Tomb_of_Nakht_TT52,20
+265,Tomb of Nefertari,Tomb_of_Nefertari,10
+266,Tomb of Unknown Soldier in Cairo,Tomb_of_Unknown_Soldier_in_Cairo,19
+267,Umm el-Qaab,Umm_el-Qaab,1
+268,Umm Kulthum Museum,Umm_Kulthum_Museum,3
+269,Unfinished obelisk in Aswan,Unfinished_obelisk_in_Aswan,60
+270,Userkaf sun temple,Userkaf_sun_temple,1
+271,Valley of the Golden Mummies,Valley_of_the_Golden_Mummies,2
+272,Valley of the Queens,Valley_of_the_Queens,12
+273,Wadi Degla,Wadi_Degla,67
+274,Wadi el-Raiyan,Wadi_el-Raiyan,27
+275,Wadi el Gemal National Park,Wadi_el_Gemal_National_Park,27
+276,Wadi Hammamat,Wadi_Hammamat,4
+277,White Monastery,White_Monastery,21
+278,White Pyramid of Amenemhat II,White_Pyramid_of_Amenemhat_II,2
+279,WV22,WV22,2

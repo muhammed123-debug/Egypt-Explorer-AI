@@ -1,0 +1,33 @@
+# ============================================================
+# 🇪🇬 Egypt Explorer AI
+# Requirements
+# ============================================================
+
+# Data
+pandas
+numpy
+
+# Web Scraping
+requests
+beautifulsoup4
+
+# Kaggle
+kagglehub
+
+# Embeddings
+sentence-transformers
+
+# Vector Database
+faiss-cpu
+
+# LLM
+groq
+
+# Environment
+python-dotenv
+
+# Web UI
+gradio
+
+# Audio
+soundfile
