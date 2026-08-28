@@ -1,15 +1,18 @@
 from pathlib import Path
 import time
 import random
+import re
 import requests
 import pandas as pd
+
 from bs4 import BeautifulSoup
 from difflib import SequenceMatcher
 from urllib.parse import quote
 
+
 # ============================================================
 # 🇪🇬 EGYPT EXPLORER AI
-# SMART WIKIPEDIA SCRAPER
+# SMART + SAFE WIKIPEDIA SCRAPER
 # ============================================================
 
 INPUT_FILE = Path("data/landmarks.csv")
@@ -20,15 +23,27 @@ WIKI_BASE = "https://en.wikipedia.org"
 HEADERS = {
     "User-Agent": (
         "EgyptExplorerAI/1.0 "
-        "(Educational Tourism RAG Project; contact: local-project)"
+        "(Educational Tourism RAG Project)"
     )
 }
 
 TIMEOUT = 20
 
-# Don't hammer Wikipedia
 MIN_DELAY = 2
 MAX_DELAY = 4
+
+# ============================================================
+# MATCHING THRESHOLDS
+# ============================================================
+
+# Direct page must have a strong title match.
+DIRECT_MATCH_THRESHOLD = 0.75
+
+# Search result must have a strong match.
+SEARCH_MATCH_THRESHOLD = 0.70
+
+# Exact / near-exact matches are preferred.
+STRONG_MATCH_THRESHOLD = 0.90
 
 
 # ============================================================
@@ -40,50 +55,236 @@ session.headers.update(HEADERS)
 
 
 # ============================================================
-# HELPERS
+# TEXT NORMALIZATION
 # ============================================================
 
 def normalize(text):
-    """Normalize text for comparison."""
 
-    if not text:
+    if text is None:
         return ""
 
-    return (
-        text.lower()
+    text = str(text).lower()
+
+    text = (
+        text
         .replace("_", " ")
         .replace("-", " ")
-        .strip()
+    )
+
+    # Remove punctuation.
+    text = re.sub(
+        r"[^\w\s]",
+        " ",
+        text
+    )
+
+    # Normalize spaces.
+    text = re.sub(
+        r"\s+",
+        " ",
+        text
+    )
+
+    return text.strip()
+
+
+# ============================================================
+# TOKENIZATION
+# ============================================================
+
+def tokens(text):
+
+    normalized = normalize(text)
+
+    if not normalized:
+        return set()
+
+    return set(
+        normalized.split()
     )
 
 
-def similarity(a, b):
-    """Calculate similarity between two names."""
+# ============================================================
+# SIMILARITY
+# ============================================================
 
-    return SequenceMatcher(
+def similarity(a, b):
+
+    a_norm = normalize(a)
+    b_norm = normalize(b)
+
+    if not a_norm or not b_norm:
+        return 0.0
+
+    # Exact match.
+    if a_norm == b_norm:
+        return 1.0
+
+    sequence_score = SequenceMatcher(
         None,
-        normalize(a),
-        normalize(b)
+        a_norm,
+        b_norm
     ).ratio()
+
+    a_tokens = tokens(a)
+    b_tokens = tokens(b)
+
+    if a_tokens and b_tokens:
+
+        intersection = (
+            a_tokens & b_tokens
+        )
+
+        union = (
+            a_tokens | b_tokens
+        )
+
+        jaccard_score = (
+            len(intersection)
+            / len(union)
+        )
+
+    else:
+
+        jaccard_score = 0.0
+
+    # Weighted score.
+    score = (
+        0.65 * sequence_score
+        + 0.35 * jaccard_score
+    )
+
+    return round(
+        score,
+        4
+    )
+
+
+# ============================================================
+# LANDMARK-SPECIFIC KEYWORDS
+# ============================================================
+
+GENERIC_WORDS = {
+    "the",
+    "of",
+    "in",
+    "and",
+    "el",
+    "al",
+    "a",
+    "an",
+}
+
+
+def meaningful_tokens(text):
+
+    return {
+        token
+        for token in tokens(text)
+        if token not in GENERIC_WORDS
+        and len(token) > 2
+    }
+
+
+# ============================================================
+# TITLE VALIDATION
+# ============================================================
+
+def title_is_relevant(
+    landmark_name,
+    wiki_title,
+    score
+):
+
+    landmark_tokens = (
+        meaningful_tokens(
+            landmark_name
+        )
+    )
+
+    wiki_tokens = (
+        meaningful_tokens(
+            wiki_title
+        )
+    )
+
+    if not landmark_tokens:
+        return score >= DIRECT_MATCH_THRESHOLD
+
+    # --------------------------------------------------------
+    # Exact normalized match
+    # --------------------------------------------------------
+
+    if normalize(
+        landmark_name
+    ) == normalize(
+        wiki_title
+    ):
+
+        return True
+
+    # --------------------------------------------------------
+    # Strong similarity
+    # --------------------------------------------------------
+
+    if score >= STRONG_MATCH_THRESHOLD:
+
+        return True
+
+    # --------------------------------------------------------
+    # Token overlap
+    # --------------------------------------------------------
+
+    common = (
+        landmark_tokens
+        & wiki_tokens
+    )
+
+    overlap = (
+        len(common)
+        / max(
+            len(landmark_tokens),
+            1
+        )
+    )
+
+    # At least half of meaningful landmark
+    # tokens should appear in the title.
+    if overlap >= 0.50 and score >= 0.65:
+
+        return True
+
+    return False
 
 
 # ============================================================
 # DIRECT WIKIPEDIA PAGE
 # ============================================================
 
-def get_direct_page(landmark_name):
+def get_direct_page(
+    landmark_name
+):
+
     """
     Try the obvious Wikipedia URL first.
 
-    This avoids the Search API for most landmarks.
+    IMPORTANT:
+    A successful HTTP request is NOT enough.
+    The final Wikipedia title must match the landmark.
     """
 
-    title = landmark_name.replace(" ", "_")
+    title = landmark_name.replace(
+        " ",
+        "_"
+    )
 
     url = (
         WIKI_BASE
         + "/wiki/"
-        + quote(title, safe="()_,.'-")
+        + quote(
+            title,
+            safe="()_,.'-"
+        )
     )
 
     try:
@@ -94,63 +295,121 @@ def get_direct_page(landmark_name):
             allow_redirects=True
         )
 
-        if response.status_code == 200:
+        if response.status_code != 200:
 
-            final_url = response.url
+            return None
 
-            # Extract final title from URL
-            final_title = (
-                final_url
-                .split("/wiki/")[-1]
-                .replace("_", " ")
+        final_url = response.url
+
+        if "/wiki/" not in final_url:
+
+            return None
+
+        final_title = (
+            final_url
+            .split("/wiki/")[-1]
+            .replace("_", " ")
+        )
+
+        final_title = final_title.strip()
+
+        score = similarity(
+            landmark_name,
+            final_title
+        )
+
+        # ----------------------------------------------------
+        # Validate redirected title.
+        # ----------------------------------------------------
+
+        if not title_is_relevant(
+            landmark_name,
+            final_title,
+            score
+        ):
+
+            print(
+                f"   ⚠️ Direct page rejected:"
             )
 
-            # Remove URL encoding
-            final_title = final_title.strip()
-
-            score = similarity(
-                landmark_name,
-                final_title
+            print(
+                f"      Requested: {landmark_name}"
             )
 
-            # Accept if reasonably similar
-            if score >= 0.45:
+            print(
+                f"      Got: {final_title}"
+            )
 
-                return {
-                    "url": final_url,
-                    "title": final_title,
-                    "score": score
-                }
+            print(
+                f"      Score: {score:.3f}"
+            )
 
-    except Exception:
-        pass
+            return None
 
-    return None
+        return {
+
+            "url":
+                final_url,
+
+            "title":
+                final_title,
+
+            "score":
+                score
+        }
+
+    except Exception as e:
+
+        print(
+            f"   ⚠️ Direct lookup error: {e}"
+        )
+
+        return None
 
 
 # ============================================================
-# WIKIPEDIA SEARCH WITH RETRY
+# WIKIPEDIA SEARCH
 # ============================================================
 
-def search_wikipedia(landmark_name, retries=4):
-    """
-    Search Wikipedia only when direct page lookup fails.
+def search_wikipedia(
+    landmark_name,
+    retries=4
+):
 
-    Uses exponential backoff for 429 responses.
+    """
+    Search Wikipedia when direct lookup fails.
+
+    Returns only strongly relevant pages.
     """
 
-    api_url = f"{WIKI_BASE}/w/api.php"
+    api_url = (
+        f"{WIKI_BASE}/w/api.php"
+    )
 
     params = {
-        "action": "query",
-        "list": "search",
-        "srsearch": landmark_name,
-        "format": "json",
-        "utf8": 1,
-        "srlimit": 3
+
+        "action":
+            "query",
+
+        "list":
+            "search",
+
+        "srsearch":
+            landmark_name,
+
+        "format":
+            "json",
+
+        "utf8":
+            1,
+
+        "srlimit":
+            5
     }
 
-    for attempt in range(retries):
+    for attempt in range(
+        retries
+    ):
 
         try:
 
@@ -160,17 +419,25 @@ def search_wikipedia(landmark_name, retries=4):
                 timeout=TIMEOUT
             )
 
-            # Rate limited
+            # ------------------------------------------------
+            # Rate limit
+            # ------------------------------------------------
+
             if response.status_code == 429:
 
-                wait = 10 * (2 ** attempt)
-
-                print(
-                    f"   ⏳ Wikipedia rate limit. "
-                    f"Waiting {wait}s..."
+                wait = (
+                    10
+                    * (2 ** attempt)
                 )
 
-                time.sleep(wait)
+                print(
+                    f"   ⏳ Wikipedia rate limit."
+                    f" Waiting {wait}s..."
+                )
+
+                time.sleep(
+                    wait
+                )
 
                 continue
 
@@ -180,16 +447,25 @@ def search_wikipedia(landmark_name, retries=4):
 
             results = (
                 data
-                .get("query", {})
-                .get("search", [])
+                .get(
+                    "query",
+                    {}
+                )
+                .get(
+                    "search",
+                    []
+                )
             )
 
             if not results:
+
                 return None
 
-            # Find best matching result
-            best_result = None
-            best_score = 0
+            # ------------------------------------------------
+            # Rank candidates
+            # ------------------------------------------------
+
+            candidates = []
 
             for result in results:
 
@@ -203,40 +479,83 @@ def search_wikipedia(landmark_name, retries=4):
                     title
                 )
 
-                if score > best_score:
+                candidates.append(
+                    {
+                        "title":
+                            title,
 
-                    best_score = score
-                    best_result = result
-
-            if not best_result:
-                return None
-
-            # Don't accept completely unrelated pages
-            if best_score < 0.40:
-
-                print(
-                    f"   ⚠️ Weak match rejected: "
-                    f"{best_result.get('title')}"
+                        "score":
+                            score
+                    }
                 )
 
-                return None
-
-            title = best_result["title"]
-
-            url = (
-                WIKI_BASE
-                + "/wiki/"
-                + quote(
-                    title.replace(" ", "_"),
-                    safe="()_,.'-"
-                )
+            candidates.sort(
+                key=lambda x: x["score"],
+                reverse=True
             )
 
-            return {
-                "url": url,
-                "title": title,
-                "score": best_score
-            }
+            # ------------------------------------------------
+            # Try candidates
+            # ------------------------------------------------
+
+            for candidate in candidates:
+
+                title = candidate[
+                    "title"
+                ]
+
+                score = candidate[
+                    "score"
+                ]
+
+                print(
+                    f"   🔎 Candidate:"
+                    f" {title}"
+                    f" ({score:.3f})"
+                )
+
+                if not title_is_relevant(
+                    landmark_name,
+                    title,
+                    score
+                ):
+
+                    continue
+
+                url = (
+                    WIKI_BASE
+                    + "/wiki/"
+                    + quote(
+                        title.replace(
+                            " ",
+                            "_"
+                        ),
+                        safe="()_,.'-"
+                    )
+                )
+
+                return {
+
+                    "url":
+                        url,
+
+                    "title":
+                        title,
+
+                    "score":
+                        score
+                }
+
+            # ------------------------------------------------
+            # Nothing reliable
+            # ------------------------------------------------
+
+            print(
+                "   ⚠️ No reliable Wikipedia "
+                "match found."
+            )
+
+            return None
 
         except requests.exceptions.RequestException as e:
 
@@ -248,13 +567,18 @@ def search_wikipedia(landmark_name, retries=4):
 
                 return None
 
-            wait = 5 * (2 ** attempt)
+            wait = (
+                5
+                * (2 ** attempt)
+            )
 
             print(
                 f"   🔄 Retry in {wait}s..."
             )
 
-            time.sleep(wait)
+            time.sleep(
+                wait
+            )
 
         except Exception as e:
 
@@ -272,8 +596,9 @@ def search_wikipedia(landmark_name, retries=4):
 # ============================================================
 
 def scrape_page(url):
+
     """
-    Extract useful readable text from Wikipedia.
+    Extract readable paragraph text.
     """
 
     response = session.get(
@@ -288,7 +613,10 @@ def scrape_page(url):
         "html.parser"
     )
 
+    # --------------------------------------------------------
     # Remove unnecessary elements
+    # --------------------------------------------------------
+
     for tag in soup([
         "script",
         "style",
@@ -302,7 +630,13 @@ def scrape_page(url):
 
         tag.decompose()
 
-    paragraphs = soup.find_all("p")
+    # --------------------------------------------------------
+    # Extract paragraphs
+    # --------------------------------------------------------
+
+    paragraphs = (
+        soup.find_all("p")
+    )
 
     texts = []
 
@@ -315,9 +649,13 @@ def scrape_page(url):
 
         if text:
 
-            texts.append(text)
+            texts.append(
+                text
+            )
 
-    return " ".join(texts).strip()
+    return " ".join(
+        texts
+    ).strip()
 
 
 # ============================================================
@@ -349,7 +687,8 @@ def load_existing():
     except Exception as e:
 
         print(
-            f"⚠️ Could not load previous results: {e}"
+            f"⚠️ Could not load previous "
+            f"results: {e}"
         )
 
         return {}
@@ -359,10 +698,14 @@ def load_existing():
 # SAVE
 # ============================================================
 
-def save_results(results):
+def save_results(
+    results
+):
 
     df = pd.DataFrame(
-        list(results.values())
+        list(
+            results.values()
+        )
     )
 
     if not df.empty:
@@ -379,14 +722,125 @@ def save_results(results):
 
 
 # ============================================================
+# VALIDATE EXISTING RESULT
+# ============================================================
+
+def existing_result_is_good(
+    row
+):
+
+    status = str(
+        row.get(
+            "status",
+            ""
+        )
+    )
+
+    text = str(
+        row.get(
+            "scraped_text",
+            ""
+        )
+    )
+
+    title = str(
+        row.get(
+            "wiki_title",
+            ""
+        )
+    )
+
+    landmark = str(
+        row.get(
+            "landmark_name",
+            ""
+        )
+    )
+
+    try:
+
+        score = float(
+            row.get(
+                "match_score",
+                0
+            )
+        )
+
+    except Exception:
+
+        score = 0.0
+
+    # --------------------------------------------------------
+    # Must have useful text.
+    # --------------------------------------------------------
+
+    if status not in [
+        "success",
+        "short_text"
+    ]:
+
+        return False
+
+    if len(text.strip()) < 500:
+
+        return False
+
+    # --------------------------------------------------------
+    # Must have a title.
+    # --------------------------------------------------------
+
+    if not title:
+
+        return False
+
+    # --------------------------------------------------------
+    # Revalidate old title.
+    # --------------------------------------------------------
+
+    if not title_is_relevant(
+        landmark,
+        title,
+        score
+    ):
+
+        print(
+            "   ⚠️ Existing result "
+            "failed title validation."
+        )
+
+        print(
+            f"      Landmark: {landmark}"
+        )
+
+        print(
+            f"      Wiki title: {title}"
+        )
+
+        print(
+            f"      Score: {score:.3f}"
+        )
+
+        return False
+
+    return True
+
+
+# ============================================================
 # MAIN
 # ============================================================
 
 def main():
 
     print("=" * 70)
-    print("🇪🇬 EGYPT EXPLORER AI")
-    print("🧠 SMART WIKIPEDIA SCRAPER")
+
+    print(
+        "🇪🇬 EGYPT EXPLORER AI"
+    )
+
+    print(
+        "🧠 SMART + SAFE WIKIPEDIA SCRAPER"
+    )
+
     print("=" * 70)
 
     # --------------------------------------------------------
@@ -406,17 +860,19 @@ def main():
     ).fillna("")
 
     print(
-        f"\n📊 Total landmarks: {len(landmarks)}"
+        f"\n📊 Total landmarks:"
+        f" {len(landmarks)}"
     )
 
     # --------------------------------------------------------
-    # Load previous progress
+    # Existing progress
     # --------------------------------------------------------
 
     results = load_existing()
 
     print(
-        f"♻️ Existing records: {len(results)}"
+        f"♻️ Existing records:"
+        f" {len(results)}"
     )
 
     # --------------------------------------------------------
@@ -429,16 +885,20 @@ def main():
             "landmark_name"
         ]
 
-        print("\n" + "-" * 70)
-
         print(
-            f"🔎 [{index + 1}/{len(landmarks)}] "
-            f"{landmark_name}"
+            "\n"
+            + "-" * 70
         )
 
-        # ----------------------------------------------------
-        # Existing successful result
-        # ----------------------------------------------------
+        print(
+            f"🔎 [{index + 1}/"
+            f"{len(landmarks)}]"
+            f" {landmark_name}"
+        )
+
+        # ====================================================
+        # Existing result validation
+        # ====================================================
 
         if landmark_name in results:
 
@@ -446,40 +906,25 @@ def main():
                 landmark_name
             ]
 
-            old_text = str(
-                old.get(
-                    "scraped_text",
-                    ""
-                )
-            )
-
-            old_status = str(
-                old.get(
-                    "status",
-                    ""
-                )
-            )
-
-            # Keep good existing data
-            if (
-                old_status == "success"
-                and len(old_text) >= 500
+            if existing_result_is_good(
+                old
             ):
 
                 print(
-                    "   ⏭️ Good data already exists."
+                    "   ⏭️ Existing data "
+                    "passed validation."
                 )
 
                 continue
 
             print(
-                "   🔄 Existing result is weak. "
-                "Trying again..."
+                "   🔄 Existing result "
+                "needs re-scraping."
             )
 
-        # ----------------------------------------------------
-        # Step 1: Direct page
-        # ----------------------------------------------------
+        # ====================================================
+        # Direct page
+        # ====================================================
 
         page = get_direct_page(
             landmark_name
@@ -488,7 +933,7 @@ def main():
         if page:
 
             print(
-                f"   🎯 Direct page found:"
+                "   🎯 Reliable direct page:"
             )
 
             print(
@@ -496,43 +941,47 @@ def main():
             )
 
             print(
-                f"   📌 Title: {page['title']}"
+                f"   📌 Title:"
+                f" {page['title']}"
             )
 
             print(
-                f"   🎯 Similarity: "
-                f"{page['score']:.2f}"
+                f"   🎯 Similarity:"
+                f" {page['score']:.3f}"
             )
 
         else:
 
-            # ------------------------------------------------
-            # Step 2: Search API fallback
-            # ------------------------------------------------
+            # =================================================
+            # Search API fallback
+            # =================================================
 
             print(
-                "   🔍 Direct page not found."
+                "   🔍 Direct page rejected/not found."
             )
 
             print(
-                "   🔎 Trying Wikipedia search..."
+                "   🔎 Searching Wikipedia..."
             )
 
             page = search_wikipedia(
                 landmark_name
             )
 
-        # ----------------------------------------------------
-        # No page
-        # ----------------------------------------------------
+        # ====================================================
+        # No reliable page
+        # ====================================================
 
         if not page:
 
             print(
-                "   ⚠️ No reliable Wikipedia page found."
+                "   ⚠️ No reliable Wikipedia "
+                "page found."
             )
 
-            results[landmark_name] = {
+            results[
+                landmark_name
+            ] = {
 
                 "landmark_id":
                     row["landmark_id"],
@@ -565,7 +1014,9 @@ def main():
                     "not_found"
             }
 
-            save_results(results)
+            save_results(
+                results
+            )
 
             time.sleep(
                 random.uniform(
@@ -576,9 +1027,9 @@ def main():
 
             continue
 
-        # ----------------------------------------------------
-        # Step 3: Scrape
-        # ----------------------------------------------------
+        # ====================================================
+        # Scrape page
+        # ====================================================
 
         try:
 
@@ -590,15 +1041,17 @@ def main():
                 page["url"]
             )
 
-            text_length = len(text)
+            text_length = len(
+                text
+            )
 
             print(
-                f"   📄 Characters: "
-                f"{text_length}"
+                f"   📄 Characters:"
+                f" {text_length}"
             )
 
             # ------------------------------------------------
-            # Quality check
+            # Quality
             # ------------------------------------------------
 
             if text_length >= 500:
@@ -613,7 +1066,13 @@ def main():
 
                 status = "invalid"
 
-            results[landmark_name] = {
+            # ------------------------------------------------
+            # Save
+            # ------------------------------------------------
+
+            results[
+                landmark_name
+            ] = {
 
                 "landmark_id":
                     row["landmark_id"],
@@ -650,16 +1109,20 @@ def main():
             }
 
             print(
-                f"   ✅ Status: {status}"
+                f"   ✅ Status:"
+                f" {status}"
             )
 
         except Exception as e:
 
             print(
-                f"   ❌ Scraping error: {e}"
+                f"   ❌ Scraping error:"
+                f" {e}"
             )
 
-            results[landmark_name] = {
+            results[
+                landmark_name
+            ] = {
 
                 "landmark_id":
                     row["landmark_id"],
@@ -695,40 +1158,57 @@ def main():
                     "error"
             }
 
-        # ----------------------------------------------------
-        # Save after every landmark
-        # ----------------------------------------------------
+        # ====================================================
+        # Save progress
+        # ====================================================
 
-        save_results(results)
+        save_results(
+            results
+        )
 
         print(
             "   💾 Progress saved."
         )
 
-        # ----------------------------------------------------
-        # Random delay
-        # ----------------------------------------------------
+        # ====================================================
+        # Delay
+        # ====================================================
 
         delay = random.uniform(
             MIN_DELAY,
             MAX_DELAY
         )
 
-        time.sleep(delay)
+        time.sleep(
+            delay
+        )
 
     # ========================================================
     # FINAL REPORT
     # ========================================================
 
-    save_results(results)
-
-    df = pd.DataFrame(
-        list(results.values())
+    save_results(
+        results
     )
 
-    print("\n" + "=" * 70)
-    print("🎉 SCRAPING FINISHED")
-    print("=" * 70)
+    df = pd.DataFrame(
+        list(
+            results.values()
+        )
+    )
+
+    print(
+        "\n"
+        + "=" * 70
+    )
+
+    print(
+        "🎉 SCRAPING + VALIDATION FINISHED"
+    )
+
+    print(
+        "=" * 70
+    )
 
     print(
         f"\n📄 Output:"
@@ -749,7 +1229,8 @@ def main():
     )
 
     print(
-        f"\n🏛️ Total records: {len(df)}"
+        f"\n🏛️ Total records:"
+        f" {len(df)}"
     )
 
 
@@ -758,4 +1239,5 @@ def main():
 # ============================================================
 
 if __name__ == "__main__":
+
     main()
